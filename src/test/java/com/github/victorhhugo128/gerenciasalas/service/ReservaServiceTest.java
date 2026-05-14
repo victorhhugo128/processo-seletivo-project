@@ -49,20 +49,11 @@ public class ReservaServiceTest {
                 LocalTime.of(11, 0),
                 1L
         );
-        // comportamento padrão
-        when(salaRepository.findById(any()))
-                .thenReturn(Optional.of(new Sala()));
-
-        when(reservaRepository.existsReserva(any(), any(), any(), any(), any()))
-                .thenReturn(false);
-
-        when(reservaRepository.findById(1L))
-                .thenReturn(Optional.of(new Reserva()));
     }
 
     @Test
     void deveLancarExcecaoQuandoHouverConflito() {
-        // e já existe reserva no horário
+        // já existe reserva no horário
         when(reservaRepository.existsReserva(any(), any(), any(), any(), any()))
                 .thenReturn(true);
 
@@ -77,6 +68,10 @@ public class ReservaServiceTest {
         when(salaRepository.findById(1L))
                 .thenReturn(Optional.empty());
 
+        // dado que não existe reserva no horário
+        when(reservaRepository.existsReserva(any(), any(), any(), any(), any()))
+                .thenReturn(false);
+
         // deve lançar recurso não encontrado
         assertThrows(RecursoNaoEncontradoException.class,
                 () -> reservaService.criarReserva(reservaRequest));
@@ -84,6 +79,14 @@ public class ReservaServiceTest {
 
     @Test
     void deveCriarReservaComSucesso() {
+        // a sala existe
+        when(salaRepository.findById(any()))
+                .thenReturn(Optional.of(new Sala()));
+
+        // não existe reserva no horário
+        when(reservaRepository.existsReserva(any(), any(), any(), any(), any()))
+                .thenReturn(false);
+
         ReservaResponse response = reservaService.criarReserva(reservaRequest);
 
         // deve criar reserva com sucesso
