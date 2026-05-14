@@ -36,13 +36,14 @@ public interface ReservaRepository extends JpaRepository<Reserva, Long> {
     );
 
     @Query("""
-        SELECT COUNT(r) FROM Reserva r
+        SELECT CASE WHEN COUNT(r) > 0 THEN true ELSE false END
+        FROM Reserva r
         WHERE r.data = :data
-            AND r.sala.id = :salaId
-            AND r.status = :status
-            AND r.horaInicio < :horaInicio
-            AND r.horaFim > :horaFim
-        """)
+          AND r.sala.id = :salaId
+          AND r.status = :status
+          AND r.horaInicio < :horaFim
+          AND r.horaFim > :horaInicio
+    """)
     boolean existsReserva(
             @Param("data") LocalDate data,
             @Param("horaInicio") LocalTime horaInicio,
