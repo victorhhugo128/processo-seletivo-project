@@ -15,7 +15,7 @@ import java.time.LocalTime;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/v1/reserva")
+@RequestMapping("/api/v1/reserva")
 @RequiredArgsConstructor
 public class ReservaController {
     private final ReservaService reservaService;

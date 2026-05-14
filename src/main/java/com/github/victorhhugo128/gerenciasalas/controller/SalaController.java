@@ -17,7 +17,7 @@ import java.time.LocalTime;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/v1/sala")
+@RequestMapping("/api/v1/sala")
 @RequiredArgsConstructor
 public class SalaController {
     private final SalaService salaService;
